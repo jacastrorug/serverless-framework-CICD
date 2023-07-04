@@ -44,9 +44,14 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v1
+        uses: actions/github-script@v6
         with:
-          message: |
-            The SLS App was deployed!
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'SLS deployment was successfull ✅!'
+            })
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
